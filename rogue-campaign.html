@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RogueCampaign.ai | Case Study 01</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* =========================================
+           GLOBAL VARIABLES & RESET (EDITORIAL THEME)
+           ========================================= */
+        :root {
+            --bg-color: #f4f3f0;       /* Warm editorial off-white */
+            --surface-color: #ffffff;  
+            --text-main: #111111;      
+            --text-muted: #666666;     
+            --border-color: #dcdbd8;   
+            --accent-color: #d32f2f;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; transition: 0.3s ease; }
+        a:hover { color: var(--accent-color); }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 4vw; }
+        
+        /* Typography System */
+        .meta-tag { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); display: block; margin-bottom: 10px; }
+        .huge-title { font-size: clamp(4rem, 12vw, 10rem); font-weight: 800; letter-spacing: -0.04em; line-height: 0.9; margin-bottom: 30px; text-transform: uppercase; }
+        
+        .grid-layout { display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+        
+        /* =========================================
+           NAVIGATION
+           ========================================= */
+        nav {
+            padding: 40px 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 100;
+        }
+        .logo { font-weight: 700; font-size: 1rem; letter-spacing: -0.5px; text-transform: uppercase; }
+        .hamburger { display: flex; flex-direction: column; gap: 6px; cursor: pointer; }
+        .hamburger span { display: block; width: 30px; height: 2px; background-color: var(--text-main); }
+
+        /* =========================================
+           HERO SECTION
+           ========================================= */
+        .cs-hero { padding: 60px 0 100px 0; }
+        
+        .tags-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 60px; }
+        .tag-box { border: 1px solid var(--border-color); padding: 8px 16px; font-size: 0.75rem; font-weight: 500; color: var(--text-muted); background: transparent; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .hero-summary { grid-column: 1 / 10; font-size: clamp(1.2rem, 2.5vw, 1.8rem); line-height: 1.4; font-weight: 400; color: var(--text-main); letter-spacing: -0.01em; margin-bottom: 100px; }
+
+        /* Vertical Badge */
+        .live-badge {
+            position: fixed; right: 0; top: 50%; transform: translateY(-50%);
+            background-color: var(--text-main); color: #fff; padding: 25px 12px;
+            writing-mode: vertical-rl; text-orientation: mixed;
+            font-size: 0.75rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+            z-index: 100; cursor: pointer; transition: 0.3s ease;
+        }
+        .live-badge:hover { background-color: var(--accent-color); padding-right: 20px; }
+
+        /* =========================================
+           PROJECT DETAILS GRID
+           ========================================= */
+        .details-grid { grid-column: 1 / 13; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); display: grid; grid-template-columns: repeat(4, 1fr); }
+        .detail-item { padding: 30px 0; border-right: 1px solid var(--border-color); }
+        .detail-item:last-child { border-right: none; }
+        .detail-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+        .detail-value { font-size: 1rem; font-weight: 500; }
+
+        /* My Role Section */
+        .role-section { grid-column: 1 / 13; display: grid; grid-template-columns: 3fr 9fr; gap: 40px; padding: 80px 0; border-bottom: 1px solid var(--border-color); }
+        .role-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .role-list p { font-size: 1.2rem; line-height: 1.6; margin-bottom: 15px; font-weight: 400; }
+
+        /* =========================================
+           APPROACH SECTION
+           ========================================= */
+        .approach-section { padding: 120px 0; }
+        .approach-header { grid-column: 1 / 13; font-size: 2.5rem; font-weight: 500; margin-bottom: 60px; letter-spacing: -0.02em; }
+        
+        .approach-grid { grid-column: 1 / 13; display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+        .approach-card { border-top: 2px solid var(--text-main); padding-top: 20px; }
+        .ac-num { font-family: var(--font-mono); font-size: 1rem; font-weight: 600; margin-bottom: 15px; display: block; }
+        .ac-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 15px; }
+        .ac-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* =========================================
+           CONTENT BLOCKS & IMAGES
+           ========================================= */
+        .content-block { padding: 80px 0; }
+        .part-label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: block; }
+        .block-title { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 500; letter-spacing: -0.02em; margin-bottom: 40px; line-height: 1.1;}
+        .block-text { font-size: 1.25rem; line-height: 1.6; color: var(--text-main); max-width: 800px; margin-bottom: 60px; }
+        
+        /* Scope Sidebar */
+        .scope-sidebar { border: 1px solid var(--border-color); padding: 30px; margin-bottom: 60px; }
+        .scope-sidebar .meta-tag { margin-bottom: 20px; }
+        .scope-item { display: flex; align-items: baseline; gap: 15px; margin-bottom: 15px; border-bottom: 1px solid #ebebeb; padding-bottom: 15px;}
+        .scope-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+        .scope-num { font-size: 2.5rem; font-weight: 600; letter-spacing: -0.03em; }
+        .scope-desc { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* Image Grids */
+        .img-full { width: 100%; height: auto; background: #e5e5e5; margin-bottom: 40px; border: 1px solid var(--border-color); }
+        .img-full img { width: 100%; height: auto; display: block; }
+        
+        .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+        .img-grid-2 img { width: 100%; height: auto; border: 1px solid var(--border-color); display: block;}
+        
+        .img-caption { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: -20px; margin-bottom: 60px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Image Label Overlay */
+        .img-wrapper { position: relative; }
+        .img-label { position: absolute; top: 20px; left: 20px; background: var(--surface-color); padding: 6px 12px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid var(--border-color); }
+
+        /* =========================================
+           FOOTER
+           ========================================= */
+        footer { padding: 120px 0 60px; border-top: 1px solid var(--border-color); text-align: center; }
+        .next-project { font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 20px; display: block; }
+        .next-title { font-size: clamp(3rem, 8vw, 6rem); font-weight: 800; letter-spacing: -0.04em; color: var(--text-main); margin-bottom: 60px; transition: color 0.3s ease; }
+        .next-title:hover { color: var(--accent-color); }
+
+        .footer-links { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 40px; font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+        .f-links-left { display: flex; gap: 30px; }
+
+        /* =========================================
+           RESPONSIVE
+           ========================================= */
+        @media (max-width: 992px) {
+            .details-grid { grid-template-columns: 1fr 1fr; }
+            .detail-item:nth-child(2) { border-right: none; }
+            .detail-item { border-bottom: 1px solid var(--border-color); }
+            
+            .role-section { grid-template-columns: 1fr; gap: 20px; }
+            .approach-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .huge-title { font-size: 3.5rem; }
+            .details-grid { grid-template-columns: 1fr; }
+            .detail-item { border-right: none !important; padding: 20px 0; }
+            .approach-grid { grid-template-columns: 1fr; }
+            .img-grid-2 { grid-template-columns: 1fr; }
+            .footer-links { flex-direction: column; gap: 20px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="index.html" class="logo">PRABHANSHU.K&reg;</a>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- LIVE DEMO / GITHUB BADGE -->
+    <a href="https://github.com/PrabhanshuKamal2121" target="_blank" class="live-badge">
+        View on GitHub <i class="fab fa-github" style="margin-top: 10px; transform: rotate(90deg);"></i>
+    </a>
+
+    <!-- HERO -->
+    <section class="cs-hero container">
+        <span class="meta-tag">(CASE STUDY · 01)</span>
+        <h1 class="huge-title">ROGUECAMPAIGN</h1>
+        
+        <div class="tags-row">
+            <span class="tag-box">AI Engineering</span>
+            <span class="tag-btn tag-box">FastAPI</span>
+            <span class="tag-btn tag-box">Multi-Agent Swarm</span>
+            <span class="tag-btn tag-box">XGBoost ML</span>
+        </div>
+
+        <div class="grid-layout">
+            <p class="hero-summary">
+                RogueCampaign.ai is an autonomous, AI-driven email marketing platform designed to replace legacy WYSIWYG newsletter tools with a predictive, agentic workflow. We engineered an ecosystem that speaks the same language across semantic copywriting, HTML compilation, and machine-learning delivery optimization.
+            </p>
+            
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Role</span>
+                    <span class="detail-value">AI Engineer</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Timeline</span>
+                    <span class="detail-value">6 Months</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Year</span>
+                    <span class="detail-value">2026</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Team</span>
+                    <span class="detail-value">Independent</span>
+                </div>
+            </div>
+
+            <div class="role-section">
+                <div class="role-title">(MY ROLE)</div>
+                <div class="role-list">
+                    <p>Designed the multi-agent swarm architecture utilizing Pinecone RAG for brand DNA adherence.</p>
+                    <p>Developed the XGBoost Send Time Optimization (STO) engine to predict peak engagement hours.</p>
+                    <p>Built the Telemetry Hub for dynamic A/B analysis of raw event streams.</p>
+                    <p>Orchestrated the headless automation pipeline via n8n and FastAPI microservices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- APPROACH -->
+    <section class="container approach-section">
+        <div class="grid-layout">
+            <h2 class="approach-header">Approach</h2>
+            <div class="approach-grid">
+                <div class="approach-card">
+                    <span class="ac-num">01</span>
+                    <h3 class="ac-title">System Architecture</h3>
+                    <p class="ac-desc">We audited the limitations of current drag-and-drop editors to map the gaps in modern email workflows. The brief: engineer an autonomous backbone, don’t just build another WYSIWYG editor.</p>
+                </div>
+                <div class="approach-card">
+                    <span class="ac-num">02</span>
+                    <h3 class="ac-title">Agentic Evolution</h3>
+                    <p class="ac-desc">A refined multi-agent system (Carl & Natt) that handles both semantic copywriting and rigid HTML table compilation. AI augmented workflows turned hours of manual formatting into milliseconds.</p>
+                </div>
+                <div class="approach-card">
+                    <span class="ac-num">03</span>
+                    <h3 class="ac-title">Telemetry & ML</h3>
+                    <p class="ac-desc">Delivery timing treated as a mathematical certainty. Integrated XGBoost algorithms evaluating 365-day rolling engagement vectors to hit the exact local hour of peak probability.</p>
+                </div>
+                <div class="approach-card">
+                    <span class="ac-num">04</span>
+                    <h3 class="ac-title">Headless Automation</h3>
+                    <p class="ac-desc">Omnichannel routing webhooks and FastAPI deployments functioning as one seamless pipeline, so a campaign moves from spreadsheet to enterprise SMTP without a single human touch.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PART 01 -->
+    <section class="container content-block">
+        <span class="part-label">(PART 01)</span>
+        <h2 class="block-title">Autonomous Swarms</h2>
+        <p class="block-text">Two internal agents for a workflow whose complexity had outgrown manual execution. Both start from a telemetry problem rather than a visual one.</p>
+
+        <div class="grid-layout" style="align-items: start;">
+            <div class="scope-sidebar" style="grid-column: 1 / 5;">
+                <span class="meta-tag">(SCOPE)</span>
+                <div class="scope-item">
+                    <span class="scope-num">350k+</span>
+                    <span class="scope-desc">nodes evaluated</span>
+                </div>
+                <div class="scope-item">
+                    <span class="scope-num">2</span>
+                    <span class="scope-desc">collaborative agents</span>
+                </div>
+                <div class="scope-item">
+                    <span class="scope-num">4</span>
+                    <span class="scope-desc">telemetry filters ranking data</span>
+                </div>
+            </div>
+
+            <div style="grid-column: 6 / 13;">
+                <span class="meta-tag">(SYSTEM 01 · PING CONTEXT)</span>
+                <h3 style="font-size: 1.8rem; margin-bottom: 20px;">The Semantic Copywriter</h3>
+                <p class="block-text" style="font-size: 1rem;">One entry point, structured around how brand DNA is stored. Carl directly queries an enterprise Pinecone vector database to synthesize high-converting copy that perfectly aligns with verified brand tone, completely bypassing standard spam-trigger heuristics.</p>
+            </div>
+        </div>
+
+        <!-- Image Gallery 1 -->
+        <div class="img-grid-2">
+            <div class="img-wrapper">
+                <span class="img-label">[ 01 ] Discovery</span>
+                <img src="RogueCampaignProject/Screenshot 2026-09-28 at 11.52.56 AM.png" alt="Pinecone DB">
+            </div>
+            <div class="img-wrapper">
+                <span class="img-label">[ 02 ] User Flow</span>
+                <img src="Screenshot 2026-09-28 at 8.33.14 PM.png" alt="Agent Flow">
+            </div>
+        </div>
+        <div class="img-wrapper img-full">
+            <span class="img-label">[ 03 ] Wireframes</span>
+            <img src="Screenshot 2026-09-28 at 1.45.17 PM.png" alt="HTML Compiler">
+        </div>
+        <div class="img-caption">Agent Natt instantly compiles structured text into responsive, Outlook-tested HTML tables.</div>
+    </section>
+
+    <!-- PART 02 -->
+    <section class="container content-block">
+        <span class="part-label">(PART 02)</span>
+        <h2 class="block-title">Machine Learning Ecosystem</h2>
+        <p class="block-text">The same platform, the other half of the job: one mathematical system that had to survive predictive analytics, rolling vectors, and raw event streams without losing statistical significance.</p>
+
+        <!-- Image Gallery 2 -->
+        <div class="img-wrapper img-full">
+            <span class="img-label">Telemetry Hub</span>
+            <img src="RogueCampaignProject/Screenshot 2026-09-28 at 1.46.26 PM.png" alt="XGBoost Data">
+        </div>
+        <div class="img-caption">The XGBoost Send Time Optimization engine evaluates 1-day to 365-day submission recency.</div>
+
+        <div class="img-grid-2">
+            <img src="RogueCampaignProject/Screenshot 2026-09-28 at 1.46.13 PM.png" alt="AB Test">
+            <img src="RogueCampaignProject/Screenshot 2026-09-28 at 1.45.56 PM.png" alt="Fatigue Curve">
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <span class="next-project">Next Project</span>
+            <a href="fractal-predictor.html" class="next-title">FRACTAL PREDICTOR</a>
+            
+            <div class="footer-links">
+                <div class="f-links-left">
+                    <a href="mailto:hello@prabhanshu.com">HELLO@PRABHANSHU.COM</a>
+                </div>
+                <div class="f-links-right">
+                    <a href="https://github.com/PrabhanshuKamal2121" target="_blank" style="margin-right: 20px;">GITHUB</a>
+                    <a href="https://www.linkedin.com/in/prabhanshu-k/" target="_blank" style="margin-right: 20px;">LINKEDIN</a>
+                    <span>© 2026 Prabhanshu Kamal. All rights reserved.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

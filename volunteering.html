@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Impact | NSS NSUT</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* =========================================
+           GLOBAL VARIABLES & RESET
+           ========================================= */
+        :root {
+            --bg-color: #f4f3f0;
+            --surface-color: #ffffff;  
+            --text-main: #111111;      
+            --text-muted: #666666;     
+            --border-color: #dcdbd8;   
+            --accent-color: #003366; /* Deep NSS Blue */
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'Fira Code', monospace;
+            --font-serif: 'Lora', serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; cursor: none;}
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            cursor: none;
+        }
+
+        a, button { cursor: none; }
+        a { color: inherit; text-decoration: none; transition: 0.3s ease; }
+        a:hover { color: var(--accent-color); }
+        
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 4vw; }
+        
+        /* CUSTOM CURSOR */
+        .custom-cursor { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background-color: var(--accent-color); border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
+        .custom-cursor-ring { position: fixed; top: 0; left: 0; width: 35px; height: 35px; border: 1px solid rgba(0, 51, 102, 0.5); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, border-color 0.3s; }
+        .cursor-hover .custom-cursor { width: 4px; height: 4px; }
+        .cursor-hover .custom-cursor-ring { width: 50px; height: 50px; border-color: var(--accent-color); background: rgba(0, 51, 102, 0.1); }
+
+        /* Typography */
+        .meta-tag { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); display: block; margin-bottom: 15px; }
+        
+        /* SCROLL REVEAL */
+        .scroll-reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* NAV */
+        nav { padding: 40px 4vw; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 100; border-bottom: 1px solid var(--border-color); }
+        .logo { font-weight: 700; font-size: 1rem; letter-spacing: -0.5px; text-transform: uppercase; }
+
+        /* HERO SECTION */
+        .story-hero { padding: 120px 0 80px 0; text-align: center; }
+        .huge-title { font-size: clamp(3rem, 8vw, 7rem); font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.03em; line-height: 1; margin-bottom: 30px; }
+        .hero-summary { font-size: clamp(1.1rem, 2vw, 1.4rem); line-height: 1.6; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+
+        /* CONTENT BLOCKS (EDITORIAL) */
+        .content-block { padding: 80px 0; border-bottom: 1px solid var(--border-color); }
+        .content-block:last-child { border-bottom: none; }
+        
+        .block-title { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 500; letter-spacing: -0.02em; margin-bottom: 30px; line-height: 1.1; }
+        .block-text { font-size: 1.15rem; line-height: 1.8; color: var(--text-main); margin-bottom: 40px; }
+        .block-text p { margin-bottom: 20px; }
+        .block-text p:first-of-type::first-letter { float: left; font-size: 4rem; line-height: 0.8; padding-right: 12px; padding-top: 8px; font-weight: 600; color: var(--accent-color); font-family: var(--font-serif);}
+
+        /* IMAGE GRIDS */
+        .img-full { width: 100%; height: auto; background: #e5e5e5; margin-bottom: 40px; border-radius: 8px; overflow: hidden;}
+        .img-full img { width: 100%; height: auto; display: block; filter: grayscale(20%); transition: 0.5s ease;}
+        .img-full:hover img { filter: grayscale(0%); transform: scale(1.02); }
+
+        .img-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+        .img-wrapper { border-radius: 8px; overflow: hidden; background: #e5e5e5; }
+        .img-wrapper img { width: 100%; height: auto; display: block; filter: grayscale(20%); transition: 0.5s ease; }
+        .img-wrapper:hover img { filter: grayscale(0%); transform: scale(1.02); }
+        .img-caption { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: -20px; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* LIST GRIDS (For SDGs & Objectives) */
+        .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
+        .list-card { padding: 30px; border: 1px solid var(--border-color); background: var(--surface-color); border-radius: 8px; transition: 0.3s ease; }
+        .list-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-color: var(--accent-color); }
+        .list-card i { font-size: 2rem; color: var(--accent-color); margin-bottom: 20px; }
+        .list-card h3 { font-size: 1.2rem; margin-bottom: 10px; font-weight: 600; }
+        .list-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
+
+        /* SDG LIST */
+        .sdg-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 30px; }
+        .sdg-item { padding: 15px 20px; background: var(--surface-color); border-left: 3px solid var(--accent-color); font-size: 0.9rem; font-weight: 500; border-radius: 0 4px 4px 0; }
+        .sdg-item span { font-weight: 700; color: var(--accent-color); margin-right: 8px; }
+
+        /* FOOTER */
+        footer { padding: 100px 0 60px; background-color: #050505; color: #fff; text-align: center; }
+        footer .meta-tag { color: #888; }
+        .footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; text-align: left; margin-top: 60px; border-top: 1px solid #222; padding-top: 60px; }
+        .footer-col h4 { font-family: var(--font-mono); font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+        .footer-col a, .footer-col p { display: block; color: #ccc; font-size: 0.95rem; margin-bottom: 12px; text-decoration: none; transition: 0.3s ease; }
+        .footer-col a:hover { color: #fff; transform: translateX(5px); }
+        .footer-bottom { margin-top: 80px; font-size: 0.85rem; color: #666; font-family: var(--font-mono); display: flex; justify-content: space-between; }
+
+        @media (max-width: 768px) {
+            .grid-2-col { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .huge-title { font-size: 3.5rem; }
+            .custom-cursor, .custom-cursor-ring { display: none !important; }
+            html, body, a, button { cursor: auto !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CUSTOM CURSOR -->
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-ring"></div>
+
+    <!-- NAV -->
+    <nav>
+        <a href="index.html" class="logo interactive-el">&larr; PRABHANSHU.K</a>
+        <span class="meta-tag" style="margin:0;">NSS NSUT CELL</span>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="story-hero container">
+        <span class="meta-tag scroll-reveal">Community Impact</span>
+        <h1 class="huge-title scroll-reveal">NOT ME, BUT YOU</h1>
+        <p class="hero-summary scroll-reveal">Dedicated to nurturing socially responsible leaders through community service, environmental drives, and nation-building initiatives at Netaji Subhas University of Technology.</p>
+    </header>
+
+    <!-- THE CORE CAMPAIGN: SAY NO TO DRUGS -->
+    <section class="content-block container">
+        <span class="meta-tag scroll-reveal">(THE INITIATIVE)</span>
+        <h2 class="block-title scroll-reveal">Say No to Drugs Campaign</h2>
+        
+        <div class="block-text scroll-reveal">
+            <p>One of the most vital outreach programs conducted by the NSS NSUT Cell focused on substance abuse awareness. The "Say No to Drugs" campaign was designed to educate students and local youth about the severe physical, mental, and societal impacts of drug addiction.</p>
+            <p>The initiative required comprehensive ground-level engagement. We began by designing clear, highly visible informational pamphlets that conveyed the urgency of the issue without being alarmist. Following the design phase, our student volunteers mobilized across the campus and surrounding areas to distribute the material directly into the hands of the youth, facilitating open conversations and spreading critical awareness.</p>
+        </div>
+
+        <!-- Campaign Images -->
+        <div class="img-full scroll-reveal">
+            <!-- Referencing the exact image names provided -->
+            <img src="Volunteer/Say No to Drugs.jpg" alt="Say No To Drugs Pamphlet Design">
+        </div>
+        <div class="img-caption scroll-reveal">Official Pamphlet Design & Layout</div>
+
+        <div class="img-grid-2 scroll-reveal">
+            <div class="img-wrapper">
+                <img src="Volunteer/Phamplet-Distribution-1.jpg" alt="Pamphlet Distribution 1">
+            </div>
+            <div class="img-wrapper">
+                <img src="Volunteer/Phamplet-Distribution-2.jpg" alt="Pamphlet Distribution 2">
+            </div>
+        </div>
+        <div class="img-caption scroll-reveal">NSS Volunteers actively distributing pamphlets to the community.</div>
+    </section>
+
+    <!-- NSS NSUT CELL OVERVIEW -->
+    <section class="content-block container">
+        <span class="meta-tag scroll-reveal">(THE FOUNDATION)</span>
+        <h2 class="block-title scroll-reveal">About NSS NSUT Cell</h2>
+        
+        <div class="block-text scroll-reveal">
+            <p>The National Service Scheme (NSS) Cell at NSUT is a student-led initiative aimed at promoting social responsibility and community service. Part of a nation-wide program initiated by the Ministry of Youth Affairs & Sports, Government of India, the cell conducts outreach programs, awareness campaigns, and volunteer efforts to foster societal development.</p>
+        </div>
+
+        <h3 class="scroll-reveal" style="margin-top: 60px; font-family: var(--font-serif);">Core Objectives</h3>
+        <div class="grid-2-col scroll-reveal">
+            <div class="list-card">
+                <i class="fas fa-hands-helping"></i>
+                <h3>Encourage Social Responsibility</h3>
+                <p>Helping students get involved in community welfare and making a positive, tangible impact on society.</p>
+            </div>
+            <div class="list-card">
+                <i class="fas fa-users"></i>
+                <h3>Develop Leadership</h3>
+                <p>Providing opportunities for students to lead, organize, and execute large-scale social projects.</p>
+            </div>
+            <div class="list-card">
+                <i class="fas fa-bullhorn"></i>
+                <h3>Raise Awareness</h3>
+                <p>Organizing events to educate the public on critical issues like health, education, and environmental sustainability.</p>
+            </div>
+            <div class="list-card">
+                <i class="fas fa-hand-holding-heart"></i>
+                <h3>Support Local Communities</h3>
+                <p>Assisting underprivileged populations by focusing on accessible education, basic healthcare, and overall well-being.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAJOR EVENTS -->
+    <section class="content-block container">
+        <span class="meta-tag scroll-reveal">(ACTION)</span>
+        <h2 class="block-title scroll-reveal">Major & Impactful Events</h2>
+        
+        <div class="grid-2-col scroll-reveal">
+            <div class="list-card">
+                <h3>Blood Donation Camps</h3>
+                <p>Frequently organizing blood donation drives to save lives and support regional healthcare infrastructure.</p>
+            </div>
+            <div class="list-card">
+                <h3>Tree Plantation</h3>
+                <p>Leading environmental conservation efforts with massive tree-planting events, waste management campaigns, and plastic reduction drives.</p>
+            </div>
+            <div class="list-card">
+                <h3>Health Awareness</h3>
+                <p>Running programs focused on mental health, hygiene, and disease prevention for students and nearby communities.</p>
+            </div>
+            <div class="list-card">
+                <h3>Swachh Bharat Abhiyan</h3>
+                <p>Participating in sweeping cleanliness drives across the campus and surrounding areas to promote hygiene and environmental care.</p>
+            </div>
+            <div class="list-card" style="grid-column: 1 / -1;">
+                <h3>Educational Outreach</h3>
+                <p>Conducting dedicated teaching programs for underprivileged children in nearby areas, focusing on basic education and essential skill-building.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- UN SDGs -->
+    <section class="content-block container">
+        <span class="meta-tag scroll-reveal">(GLOBAL ALIGNMENT)</span>
+        <h2 class="block-title scroll-reveal">United Nations SDGs</h2>
+        <p class="block-text scroll-reveal" style="font-size: 1rem;">Our initiatives are strictly aligned with the Sustainable Development Goals (SDGs) outlined by the United Nations, ensuring our local actions contribute to a global mission.</p>
+        
+        <div class="sdg-list scroll-reveal">
+            <div class="sdg-item"><span>01.</span> No Poverty</div>
+            <div class="sdg-item"><span>02.</span> Zero Hunger</div>
+            <div class="sdg-item"><span>03.</span> Good Health & Well-being</div>
+            <div class="sdg-item"><span>04.</span> Quality Education</div>
+            <div class="sdg-item"><span>05.</span> Gender Equality</div>
+            <div class="sdg-item"><span>06.</span> Clean Water & Sanitation</div>
+            <div class="sdg-item"><span>07.</span> Affordable & Clean Energy</div>
+            <div class="sdg-item"><span>08.</span> Decent Work & Economic Growth</div>
+            <div class="sdg-item"><span>09.</span> Industry, Innovation & Infrastructure</div>
+            <div class="sdg-item"><span>10.</span> Reduced Inequalities</div>
+            <div class="sdg-item"><span>11.</span> Sustainable Cities & Communities</div>
+            <div class="sdg-item"><span>12.</span> Responsible Consumption & Production</div>
+            <div class="sdg-item"><span>13.</span> Climate Action</div>
+            <div class="sdg-item"><span>14.</span> Life Below Water</div>
+            <div class="sdg-item"><span>15.</span> Life on Land</div>
+            <div class="sdg-item"><span>16.</span> Peace, Justice & Strong Institutions</div>
+            <div class="sdg-item"><span>17.</span> Partnerships for the Goals</div>
+        </div>
+    </section>
+
+    <!-- STRUCTURE & BENEFITS -->
+    <section class="content-block container">
+        <div class="grid-2-col" style="margin-top: 0;">
+            <div class="scroll-reveal">
+                <span class="meta-tag">Structure</span>
+                <h3 style="font-family: var(--font-serif); font-size: 2rem; margin-bottom: 20px;">The Organization</h3>
+                <p style="margin-bottom: 15px;"><strong>Programme Coordinator:</strong> Usually a faculty member at NSUT, responsible for overseeing all NSS activities at the institutional level.</p>
+                <p style="margin-bottom: 15px;"><strong>Core Committee:</strong> Active student leaders who take charge of organizing, planning, and managing large-scale events.</p>
+                <p><strong>Student Volunteers:</strong> The primary driving force. Students voluntarily participate to execute social service activities on the ground.</p>
+            </div>
+            <div class="scroll-reveal">
+                <span class="meta-tag">Why Join</span>
+                <h3 style="font-family: var(--font-serif); font-size: 2rem; margin-bottom: 20px;">Volunteer Benefits</h3>
+                <ul style="list-style: none; color: var(--text-muted);">
+                    <li style="margin-bottom: 10px;"><strong style="color:var(--text-main)">Skill Development:</strong> Hands-on experience in leadership, teamwork, and crisis organization.</li>
+                    <li style="margin-bottom: 10px;"><strong style="color:var(--text-main)">Networking:</strong> Connect with like-minded individuals and professionals across various sectors.</li>
+                    <li style="margin-bottom: 10px;"><strong style="color:var(--text-main)">Resume Building:</strong> Strengthen your CV with verified, impactful community service records.</li>
+                    <li><strong style="color:var(--text-main)">Personal Growth:</strong> Develop profound empathy and a broader perspective on complex societal issues.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container scroll-reveal">
+            <span class="meta-tag">NSS NSUT CELL</span>
+            <h2 style="font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 4rem); font-weight: 400;">Not Me, But You.</h2>
+            
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="index.html" class="interactive-el">Home</a>
+                    <a href="mailto:prabhanshukamal2121@gmail.com" class="huge-email interactive-el">Contact</a>
+                    <a href="stories.html" class="interactive-el">Behind the Stories</a>
+                </div>
+            
+                
+        </div>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const cursorDot = document.querySelector('.custom-cursor');
+        const cursorRing = document.querySelector('.custom-cursor-ring');
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let ringX = mouseX, ringY = mouseY;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            cursorDot.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
+        });
+
+        function animateCursorRing() {
+            ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+            cursorRing.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%))`;
+            requestAnimationFrame(animateCursorRing);
+        }
+        animateCursorRing();
+
+        document.querySelectorAll('a, button, .interactive-el').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+
+        // Scroll Reveal
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => { revealOnScroll.observe(el); });
+    </script>
+</body>
+</html>

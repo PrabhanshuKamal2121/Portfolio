@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certifications & Credentials | Prabhanshu Kamal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* =========================================
+           GLOBAL VARIABLES & RESET
+           ========================================= */
+        :root {
+            --bg-color: #f4f3f0;
+            --surface-color: #ffffff;  
+            --text-main: #111111;      
+            --text-muted: #666666;     
+            --border-color: #dcdbd8;   
+            --accent-color: #d32f2f; 
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'Fira Code', monospace;
+            --font-serif: 'Lora', serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; cursor: none;}
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            cursor: none;
+        }
+
+        a, button { cursor: none; }
+        a { color: inherit; text-decoration: none; transition: 0.3s ease; }
+        a:hover { color: var(--accent-color); }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 4vw; }
+        
+        /* CUSTOM CURSOR */
+        .custom-cursor { position: fixed; top: 0; left: 0; width: 8px; height: 8px; background-color: var(--accent-color); border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
+        .custom-cursor-ring { position: fixed; top: 0; left: 0; width: 35px; height: 35px; border: 1px solid rgba(211,47,47, 0.5); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, border-color 0.3s; }
+        .cursor-hover .custom-cursor { width: 4px; height: 4px; }
+        .cursor-hover .custom-cursor-ring { width: 50px; height: 50px; border-color: var(--accent-color); background: rgba(211,47,47, 0.1); }
+
+        /* Typography */
+        .meta-tag { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); display: block; margin-bottom: 15px; }
+        
+        /* SCROLL REVEAL */
+        .scroll-reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* NAV */
+        nav { padding: 40px 4vw; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 100; border-bottom: 1px solid var(--border-color); }
+        .logo { font-weight: 700; font-size: 1rem; letter-spacing: -0.5px; text-transform: uppercase; }
+
+        /* HERO SECTION */
+        .cert-hero { padding: 120px 0 80px 0; text-align: center; }
+        .huge-title { font-size: clamp(3rem, 8vw, 6.5rem); font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.03em; line-height: 1; margin-bottom: 30px; text-transform: uppercase; }
+        .hero-summary { font-size: clamp(1.1rem, 2vw, 1.4rem); line-height: 1.6; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+
+        /* CERTIFICATIONS SHOWCASE */
+        .cert-showcase {
+            padding: 80px 0 120px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 120px;
+        }
+
+        .cert-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        /* Alternating layout */
+        .cert-block:nth-child(even) .cert-text { order: 2; }
+        .cert-block:nth-child(even) .cert-visual { order: 1; }
+
+        .cert-text h2 {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 500;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 25px;
+            color: var(--text-main);
+        }
+
+        .cert-text p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+        .cert-text p:last-of-type { margin-bottom: 0; }
+        
+        .highlight-text {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        .cert-tag {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .cert-visual {
+            background: #e5e5e5;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cert-visual::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .cert-visual img {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: contain; /* Ensures entire certificate is visible */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .cert-visual:hover img {
+            transform: scale(1.03);
+        }
+
+        /* FOOTER */
+        footer { padding: 100px 0 60px; background-color: #050505; color: #fff; text-align: center; }
+        footer .meta-tag { color: #888; }
+        .footer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; text-align: left; margin-top: 60px; border-top: 1px solid #222; padding-top: 60px; }
+        .footer-col h4 { font-family: var(--font-mono); font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+        .footer-col a, .footer-col p { display: block; color: #ccc; font-size: 0.95rem; margin-bottom: 12px; text-decoration: none; transition: 0.3s ease; }
+        .footer-col a:hover { color: #fff; transform: translateX(5px); }
+        .footer-bottom { margin-top: 80px; font-size: 0.85rem; color: #666; font-family: var(--font-mono); display: flex; justify-content: space-between; }
+
+        @media (max-width: 992px) {
+            .cert-block { grid-template-columns: 1fr; gap: 40px; }
+            .cert-block:nth-child(even) .cert-text { order: 1; }
+            .cert-block:nth-child(even) .cert-visual { order: 2; }
+            .huge-title { font-size: 4rem; }
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr; }
+            .huge-title { font-size: 3rem; }
+            .custom-cursor, .custom-cursor-ring { display: none !important; }
+            html, body, a, button { cursor: auto !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CUSTOM CURSOR -->
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-ring"></div>
+
+    <!-- NAV -->
+    <nav>
+        <a href="index.html" class="logo interactive-el">&larr; PRABHANSHU.K</a>
+        <span class="meta-tag" style="margin:0;">VERIFIED CREDENTIALS</span>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="cert-hero container">
+        <span class="meta-tag scroll-reveal">Official Verification</span>
+        <h1 class="huge-title scroll-reveal">Licenses &<br>Certifications</h1>
+        <p class="hero-summary scroll-reveal">A documented history of hackathon victories, rigorous programming internships, and verified community service impact.</p>
+    </header>
+
+    <!-- CERTIFICATIONS LIST -->
+    <section class="cert-showcase container">
+
+        <!-- 1. AI4Humanity Hackathon -->
+        <div class="cert-block scroll-reveal">
+            <div class="cert-text">
+                <span class="meta-tag">Hackathon Finalist · Top 5</span>
+                <h2>AI4Humanity Summit 2025</h2>
+                <p>Developed <span class="highlight-text">Mediflow AI</span> as part of the AI4Humanity Summit 2025 held in Delhi—a prestigious hackathon that brought together innovators using artificial intelligence for social good.</p>
+                <p>Our project aimed to streamline healthcare access using AI-powered predictive analytics and intuitive interfaces. Mediflow assists users in identifying potential health risks (like heart disease) early and accurately, providing insights and recommendations in real-time through a seamless app experience.</p>
+                <p>Built using HTML, CSS, JavaScript, and advanced chatbot technologies, it bridges the gap between users and accessible healthcare information—enhancing care and reducing wait times.</p>
+                
+                <div class="tags-container">
+                    <span class="cert-tag">Predictive Analytics</span>
+                    <span class="cert-tag">Chatbot Integration</span>
+                    <span class="cert-tag">HTML / CSS / JS</span>
+                </div>
+            </div>
+            <div class="cert-visual interactive-el">
+                <img src="Ai4humanity-certificate.png" alt="AI4Humanity Certificate">
+            </div>
+        </div>
+
+        <!-- 2. Python Programming Internship -->
+        <div class="cert-block scroll-reveal">
+            <div class="cert-text">
+                <span class="meta-tag">Internship Credential</span>
+                <h2>Python Programming Internship</h2>
+                <p>Officially joined <span class="highlight-text">VaultofCodes</span> as a Python Programming Intern to scale my foundational logic into enterprise-ready execution.</p>
+                <p>Over the course of the rigorous two-month timeline, I dove deep into real-world software engineering projects, honed practical back-end skills, and worked under expert guidance to build impactful, scalable solutions.</p>
+                <p>This experience solidified my architectural understanding of Python, moving beyond basic scripting into complex algorithm deployment and robust software engineering.</p>
+                
+                <div class="tags-container">
+                    <span class="cert-tag">#PythonDeveloper</span>
+                    <span class="cert-tag">#SoftwareEngineering</span>
+                    <span class="cert-tag">#BackendSystems</span>
+                </div>
+            </div>
+            <div class="cert-visual interactive-el">
+                <img src="Python-certificate.png" alt="VaultofCodes Python Certificate">
+            </div>
+        </div>
+
+        <!-- 3. NSS Certification -->
+        <div class="cert-block scroll-reveal">
+            <div class="cert-text">
+                <span class="meta-tag">Community Service</span>
+                <h2>National Service Scheme (NSS)</h2>
+                <p>As part of the highly respected NSS community internship program, I contributed <span class="highlight-text">87 verified hours of service</span> focused strictly on civic engagement, social awareness, and community welfare.</p>
+                <p>My responsibilities spanned across the city: assisting at local voting booths to support the democratic process, participating in the on-ground organization of awareness seminars, and executing critical drives.</p>
+                <p>By contributing heavily to campus initiatives targeting education, hygiene, and social development, I massively enhanced my teamwork, public communication, and crisis leadership skills while giving back meaningfully to the society.</p>
+                
+                <div class="tags-container">
+                    <span class="cert-tag">Civic Engagement</span>
+                    <span class="cert-tag">Public Leadership</span>
+                    <span class="cert-tag">Event Organization</span>
+                </div>
+            </div>
+            <div class="cert-visual interactive-el">
+                <img src="Nss-Certificate.png" alt="NSS Certification">
+            </div>
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container scroll-reveal">
+            <span class="meta-tag">PRABHANSHU KAMAL</span>
+            <h2 style="font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 4rem); font-weight: 400; margin-bottom: 0;">Keep Building.</h2>
+            
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <a href="index.html" class="interactive-el">Home Portfolio</a>
+                    <a href="index.html#work" class="interactive-el">Projects Index</a>
+                    <a href="stories.html" class="interactive-el">Behind the Stories</a>
+                    <a href="volunteering.html" class="interactive-el">Volunteering Record</a>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Social Networks</h4>
+                    <a href="https://github.com/PrabhanshuKamal2121" target="_blank" class="interactive-el">GitHub</a>
+                    <a href="#" target="_blank" class="interactive-el">LinkedIn</a>
+                    <a href="#" target="_blank" class="interactive-el">Kaggle</a>
+                    <a href="#" target="_blank" class="interactive-el">Devpost</a>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Contact Office</h4>
+                    <p>Email: <a href="mailto:hello@prabhanshu.com" style="display:inline; color:#fff;" class="interactive-el">hello@prabhanshu.com</a></p>
+                    <p style="margin-top: 15px; color:#aaa; line-height:1.6;">Available for Data Science &<br>Machine Learning Internships.<br>Delhi, India / Remote.</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <span>© 2026 Prabhanshu Kamal. All rights reserved.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const cursorDot = document.querySelector('.custom-cursor');
+        const cursorRing = document.querySelector('.custom-cursor-ring');
+        let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+        let ringX = mouseX, ringY = mouseY;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            cursorDot.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
+        });
+
+        function animateCursorRing() {
+            ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+            cursorRing.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%))`;
+            requestAnimationFrame(animateCursorRing);
+        }
+        animateCursorRing();
+
+        document.querySelectorAll('a, button, .interactive-el').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+
+        // Scroll Reveal
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => { revealOnScroll.observe(el); });
+    </script>
+</body>
+</html>

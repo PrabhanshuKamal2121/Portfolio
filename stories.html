@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Behind the Stories | Prabhanshu Kamal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-main: #ffffff;
+            --text-muted: #888888;
+            --accent-color: #d32f2f;
+            --surface-color: #111111;
+            --border-color: #222222;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Lora', serif;
+            --font-mono: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 30px 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+        nav a { color: #fff; text-decoration: none; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; transition: 0.3s ease; }
+        nav a:hover { color: var(--accent-color); }
+        .page-title { font-family: var(--font-mono); color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;}
+
+        /* Blog Header */
+        .blog-hero {
+            max-width: 900px;
+            margin: 160px auto 80px auto;
+            padding: 0 24px;
+            text-align: center;
+        }
+        .blog-hero h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-family: var(--font-serif);
+            font-weight: 500;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+        }
+        .blog-hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Blog Feed Grid */
+        .blog-feed {
+            max-width: 1000px;
+            margin: 0 auto 160px auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        .story-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: grid;
+            grid-template-columns: 40% 60%;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        .story-card:hover {
+            transform: translateY(-5px);
+            border-color: #444;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .card-img-wrapper {
+            width: 100%;
+            height: 100%;
+            min-height: 280px;
+            overflow: hidden;
+            position: relative;
+        }
+        .card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(80%);
+            transition: filter 0.5s ease, transform 0.5s ease;
+        }
+        .story-card:hover .card-img-wrapper img {
+            filter: grayscale(0%);
+            transform: scale(1.04);
+        }
+
+        .card-body {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .card-num { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-color); text-transform: uppercase; letter-spacing: 2px; }
+        .card-tag { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            line-height: 1.25;
+            margin-bottom: 20px;
+            font-weight: 500;
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+        .story-card:hover .card-title { color: var(--accent-color); }
+
+        .card-excerpt {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .read-link {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+        .read-link i { transition: transform 0.3s ease; }
+        .story-card:hover .read-link i { transform: translateX(5px); color: var(--accent-color); }
+
+        /* Modal Overlay */
+        .story-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background: #f5f5f3;
+            color: #111;
+            z-index: 200;
+            overflow-y: auto;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .story-modal.active { opacity: 1; pointer-events: auto; }
+        
+        .close-btn {
+            position: fixed; top: 40px; right: 5vw;
+            font-size: 2rem; color: #111; cursor: pointer; z-index: 201;
+            background: #fff; width: 50px; height: 50px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: 0.3s ease;
+        }
+        .close-btn:hover { transform: scale(1.1); background: var(--accent-color); color: #fff; }
+
+        .modal-container { max-width: 900px; margin: 120px auto; padding: 0 24px 100px 24px; }
+        
+        .m-header { text-align: center; margin-bottom: 60px; }
+        .m-tag { font-family: var(--font-mono); color: #777; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; display: block; }
+        .m-title { font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; letter-spacing: -0.02em; }
+
+        .m-body { font-family: var(--font-serif); font-size: 1.15rem; line-height: 1.85; color: #333; }
+        .m-body p { margin-bottom: 25px; }
+        .m-body p:first-of-type::first-letter { float: left; font-size: 4rem; line-height: 0.8; padding-right: 12px; padding-top: 8px; font-weight: 600; color: var(--accent-color); }
+
+        /* In-Story Image Grid */
+        .story-image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 60px 0;
+        }
+        .story-image-grid.full { grid-template-columns: 1fr; }
+        .s-img { width: 100%; height: 350px; background: #ddd; border-radius: 4px; overflow: hidden; }
+        .s-img.large { height: 500px; }
+        .s-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%); transition: 0.4s ease;}
+        .s-img img:hover { filter: grayscale(0%); transform: scale(1.02); }
+
+        @media (max-width: 900px) {
+            .story-card { grid-template-columns: 1fr; }
+            .card-img-wrapper { height: 220px; min-height: auto; }
+            .card-body { padding: 30px; }
+            .story-image-grid { grid-template-columns: 1fr; }
+            .s-img, .s-img.large { height: 260px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html">&larr; Back to Portfolio</a>
+        <div class="page-title">Editorial / Stories</div>
+    </nav>
+
+    <header class="blog-hero">
+        <h1>Behind the Stories</h1>
+        <p>Deep dives into architecture breakdowns, coding failures, and technical case studies behind the builds.</p>
+    </header>
+
+    <!-- Normal Blog Feed Layout -->
+    <main class="blog-feed">
+        
+        <!-- Card 1 -->
+        <article class="story-card" data-story="1">
+            <div class="card-img-wrapper">
+                <img src="Titanic-showcase.png" alt="Titanic">
+            </div>
+            <div class="card-body">
+                <div>
+                    <div class="card-meta">
+                        <span class="card-num">Story 01</span>
+                        <span class="card-tag">Game Dev & ML</span>
+                    </div>
+                    <h2 class="card-title">Killing the Form: Gamifying Machine Learning Inference</h2>
+                    <p class="card-excerpt">Everyone who touches machine learning eventually stares down the Titanic dataset. Instead of a sterile form, I built an interactive isometric ship where users control a pixel-art passenger.</p>
+                </div>
+                <div class="read-link">Read Full Story <i class="fas fa-arrow-right"></i></div>
+            </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="story-card" data-story="2">
+            <div class="card-img-wrapper">
+                <img src="RogueCampaign.ai.png" alt="Email Swarm">
+            </div>
+            <div class="card-body">
+                <div>
+                    <div class="card-meta">
+                        <span class="card-num">Story 02</span>
+                        <span class="card-tag">Agentic AI & FastAPI</span>
+                    </div>
+                    <h2 class="card-title">The Death of the Drag-and-Drop: Building an Autonomous Email Swarm</h2>
+                    <p class="card-excerpt">Email marketing automation tools are permanently trapped in 2014. Here is how I engineered a multi-agent engine driven by Pinecone RAG and XGBoost STO.</p>
+                </div>
+                <div class="read-link">Read Full Story <i class="fas fa-arrow-right"></i></div>
+            </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="story-card" data-story="3">
+            <div class="card-img-wrapper">
+                <img src="one-single mistake.jpeg" alt="N8n Error">
+            </div>
+            <div class="card-body">
+                <div>
+                    <div class="card-meta">
+                        <span class="card-num">Story 03</span>
+                        <span class="card-tag">Workflow Disasters</span>
+                    </div>
+                    <h2 class="card-title">A Weapon of Mass Destruction: My 60-Second Spam Loop</h2>
+                    <p class="card-excerpt">How a single miswired condition block in n8n accidentally turned my test automation into a relentless B2B/D2C skincare spam machine.</p>
+                </div>
+                <div class="read-link">Read Full Story <i class="fas fa-arrow-right"></i></div>
+            </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="story-card" data-story="4">
+            <div class="card-img-wrapper">
+                <img src="animals.png" alt="NLP Vector">
+            </div>
+            <div class="card-body">
+                <div>
+                    <div class="card-meta">
+                        <span class="card-num">Story 04</span>
+                        <span class="card-tag">NLP & Vector Math</span>
+                    </div>
+                    <h2 class="card-title">Indexing the Office: Turning Coworkers into Vectors</h2>
+                    <p class="card-excerpt">Translating human neuroses and hyper-specific workplace habits into animal equivalents using NLTK lemmatization and Scikit-Learn TF-IDF vectorizers.</p>
+                </div>
+                <div class="read-link">Read Full Story <i class="fas fa-arrow-right"></i></div>
+            </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="story-card" data-story="5">
+            <div class="card-img-wrapper">
+                <img src="Prediction.png" alt="Accuracy">
+            </div>
+            <div class="card-body">
+                <div>
+                    <div class="card-meta">
+                        <span class="card-num">Story 05</span>
+                        <span class="card-tag">Machine Learning</span>
+                    </div>
+                    <h2 class="card-title">Earning Accuracy: From 11% Guesses to 78% Precision</h2>
+                    <p class="card-excerpt">When you train a model on messy real-world export data, accuracy isn't gifted, it's earned. A deep dive into feature engineering for Fractal Overseas.</p>
+                </div>
+                <div class="read-link">Read Full Story <i class="fas fa-arrow-right"></i></div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- MODAL -->
+    <div class="story-modal" id="story-modal">
+        <div class="close-btn" id="close-modal"><i class="fas fa-times"></i></div>
+        <div class="modal-container" id="modal-content-area">
+            <!-- Dynamic Content Injected Here -->
+        </div>
+    </div>
+
+    <!-- Raw Story Data for Injection -->
+    <script>
+        const storyData = {
+            "1": {
+                tag: "Not Your Simple Titanic Prediction",
+                title: "Killing the Form: Gamifying Machine Learning Inference",
+                html: `
+                    <p>Everyone who touches machine learning eventually stares down the Titanic dataset. It’s the undisputed "Hello World" of data science. But after building the standard Jupyter Notebook and a basic HTML form to output a survival percentage, I couldn't help but feel a little underwhelmed. I didn't want a user to just type numbers into a blank screen. I wanted them to actually board the ship.</p>
+                    
+                    <div class="story-image-grid full">
+                        <div class="s-img large"><img src="Titanic-showcase.png" alt="Img 1"></div>
+                    </div>
+
+                    <p>That initial spark spiraled into a project that completely blurred the line between data science and game development. The vision was to create a fully playable web experience where you control a pixel-art passenger exploring an isometric 2D deck, find your class zone, and pull up the passenger manifest to face your destiny.</p>
+                    <p>The execution, however, meant diving deep into the weeds. Instead of grabbing an off-the-shelf game engine, I decided to build the frontend from scratch using HTML5 &lt;canvas&gt; and vanilla JavaScript. Suddenly, my ML project turned into a crash course in managing dynamic cameras and building a sprite-sheet state machine to handle the character's idle, walk, and run animations.</p>
+
+                    <div class="story-image-grid">
+                        <div class="s-img"><img src="Gemini_Generated_Image_ (8).png" alt="Img 2"></div>
+                        <div class="s-img"><img src="Gemini_Generated_Image_ (7).png" alt="Img 3"></div>
+                    </div>
+
+                    <p>The most agonizing part was the geometry. Writing the math to perfectly align a 200x200 diagonal collision matrix for precise isometric movement took days of trial, error, and characters walking through walls. To make the environment feel immersive, the ship needed to breathe. I tied the deck, the collision grid, and the player character to a continuous sine-wave offset. Getting the entire custom-built world to naturally bob up and down on a simulated ocean was a massive breakthrough, even if it meant recalculating positions relentlessly.</p>
+                    
+                    <p>Halfway through development, I realized that plotting collision points for an entire ship deck by hand was impossible. I actually had to pause the game development to build a custom, integrated map-painting tool directly into the browser. It featured undo/redo states and matrix export functionality, strictly so I could visually "draw" the collision boundaries and spawn zones over the ship's layout.</p>
+
+                    <div class="story-image-grid full">
+                        <div class="s-img large"><img src="Gemini_Generated_Image_ (6).png" alt="Img 4"></div>
+                    </div>
+
+                    <p>Underneath all of this graphical heavy lifting, a Python/Flask backend was doing the quiet, heavy work. It seamlessly served the static game assets while hosting the actual machine learning prediction endpoint. When a player finally presses 'U' and submits their manifest data—their ticket class, age, sibling count, and fare—the model calculates their survival probability in real-time.</p>
+                    <p>The final hurdle was the cinematic payoff. Submitting your ticket triggers an interactive crash sequence and full-screen .mp4 cinematic transitions. Making sure these massive video files didn't entirely freeze my single-threaded JavaScript game loop was a nightmare. I eventually had to rely on Flask multi-threading and strict lazy-loading protocols to keep the frame rate smooth while the inevitable iceberg approached. Bridging the gap between a standard data science pipeline and a custom, interactive frontend engine pushed me far out of my comfort zone.</p>
+                `
+            },
+            "2": {
+                tag: "RogueCampaign.ai",
+                title: "The Death of the Drag-and-Drop: Building an Autonomous Email Swarm",
+                html: `
+                    <p>For the last decade, I found myself stuck in the exact same mind-numbing routine: dragging clunky rectangular blocks across static email builders, guessing the "perfect" delivery hour, and staring at split tests that took weeks to reach any real statistical significance. It felt like most marketing automation tools were permanently trapped in 2014.</p>
+                    
+                    <div class="story-image-grid full">
+                        <div class="s-img large"><img src="RogueCampaign.ai.png" alt="Img 1"></div>
+                    </div>
+
+                    <p>I realized that email marketing didn’t need another pretty drag-and-drop editor. It desperately needed an autonomous, operational backbone. That frustration became the exact catalyst for building RogueCampaign.ai. I wanted to step away from being an email mechanic and instead engineer an autonomous, multi-agent engine driven entirely by end-to-end telemetry and predictive machine learning.</p>
+                    <div class="story-image-grid">
+                        <div class="s-img"><img src="Screenshot 2026-09-28 at 1.45.17 PM.png" alt="Img 2"></div>
+                        <div class="s-img"><img src="Screenshot 2026-09-28 at 1.45.56 PM.png" alt="Img 3"></div>
+                    </div>
+                    <p>Instead of manually drafting copy and wrestling with email client CSS bugs, I built a two-agent collaborative system. The first agent, Carl, acts as a semantic copywriter. Carl directly queries an enterprise Pinecone vector database to synthesize high-converting, single-CTA copy that perfectly aligns with verified brand DNA.</p>
+
+                    <div class="story-image-grid">
+                        <div class="s-img"><img src="Screenshot 2026-09-28 at 1.28.42 PM.png" alt="Img 2"></div>
+                        <div class="s-img"><img src="Screenshot 2026-09-28 at 1.44.10 PM.png" alt="Img 3"></div>
+                    </div>
+
+                    
+
+                    <p>Once the text is generated, the second agent, Natt, takes over as the architectural compiler. Natt takes Carl's structured text and instantly compiles it into responsive, Outlook-tested HTML tables in milliseconds. But brilliant emails are useless if they arrive at the wrong time. Sending a mass blast at 9:00 AM EST guarantees that half your global database receives it while they are sound asleep.</p>
+                    
+                    <div class="story-image-grid full">
+                        <div class="s-img large"><img src="Screenshot 2026-09-28 at 1.46.13 PM.png" alt="Img 4"></div>
+                    </div>
+
+                    <p>To solve this, I integrated an XGBoost Send Time Optimization (STO) engine. Instead of guessing, the engine evaluates rolling engagement vectors to predict the exact local hour of peak open and click probability for every single individual node in the database. I also built a Telemetry Hub to handle dynamic A/B analysis, evaluating control versus variant uplift directly from raw event streams.</p>
+                    <p>Finally, for true headless execution, I wired together n8n and FastAPI. When you drop a customer spreadsheet into the system, it automatically normalizes the data, schedules, batches, and pushes payloads straight through enterprise SMTP relays without a single human intervention. Watching this multi-agent platform boot up and deploy live campaigns autonomously makes every CSS quirk I ever fought completely worth it.</p>
+                `
+            },
+            "3": {
+                tag: "Workflow Disasters",
+                title: "A Weapon of Mass Destruction: My 60-Second Spam Loop",
+                html: `
+                    <p>Getting an email from Google usually brings a split-second of hope for good news, but mine simply read: "You have reached a limit for sending mail. Your message was not sent."</p>
+                    
+                    <div class="story-image-grid full">
+                        <div class="s-img large"><img src="one-single mistake.jpeg" alt="Img 1"></div>
+                    </div>
+
+                    <p>I had been deep in the weeds building out a scheduling workflow in n8n. The architecture was supposed to be perfectly straightforward: pull target data from a Google Sheet and systematically automate a batch of outgoing emails. While trying to isolate and test my logic, I temporarily wired my Gmail sender node to the "false" branch of my condition block.</p>
+                    <p>What I completely failed to realize was that my schedule trigger was still set to execute every single minute—and I had casually left the entire workflow active.</p>
+
+                    <div class="story-image-grid">
+                        <div class="s-img"><img src="Screenshot 2026-09-28 at 7.15.11 PM.png" alt="Img 2"></div>
+                        <div class="s-img"><img src="Screenshot 2026-09-28 at 7.15.54 PM.png" alt="Img 3"></div>
+                    </div>
+
+                    <p>While I was completely oblivious, my automation went to work with terrifying, ruthless efficiency. Every sixty seconds, it enthusiastically fired off a drafted marketing email for "ROGUE" skincare. To make matters worse, it wasn't just spam; it was a beautiful Frankenstein's monster of a message. The subject line was strictly B2B SaaS, offering "Ideas to help optimize your team's workflow." But the body text was aggressively D2C skincare.</p>
+
+                    <div class="story-image-grid full">
+                        <div class="s-img large"><img src="Screenshot 2026-09-28 at 7.10.56 PM.png" alt="Img 4"></div>
+                    </div>
+
+                    <p>To top off the absolute lack of professionalism, my Liquid personalization tags had completely failed, greeting everyone with the incredibly warm and human: <code>Hey {{ subscriber.first_name | default: "there" }},</code>.</p>
+                    <p>My accidental reign of skincare-spam terror only came to an end because Google’s Mail Delivery Subsystem finally recognized the anomaly, stepped in, and mercifully stripped my sending privileges to stop the bleeding. A one-minute interval is essentially a weapon of mass destruction if you forget to toggle off your active testing nodes.</p>
+                `
+            },
+            "4": {
+                tag: "NLP & Vector Math",
+                title: "Indexing the Office: Turning Coworkers into Vectors",
+                html: `
+                    <p>Every office has its distinct wildlife. There is always the person who paces relentlessly across the room during 1-on-1s, the digital archaeologist who excavates eight-year-old Jira tickets just to prove a point, and the teammate who remains completely on mute while vibrating from six shots of espresso.</p>
+                    
+                    <div class="story-image-grid full">
+                        <div class="s-img large"><img src="animals.png" alt="Img 1"></div>
+                    </div>
+
+                    <p>I wanted a way to categorize these hyper-specific workplace behaviors, but traditional personality quizzes were too rigid. I decided to build a tool that could read a ridiculous work habit and calculate the exact animal equivalent. Translating human neuroses into animal traits meant I needed a massive amount of data. I started by indexing a dataset of over 2,700 animal behavioral traits.</p>
+
+                    <div class="story-image-grid">
+                        <div class="s-img"><img src="Screenshot 2026-09-28 at 7.51.41 PM.png" alt="Img 2"></div>
+                        <div class="s-img"><img src="Screenshot 2026-09-28 at 7.52.28 PM.png" alt="Img 3"></div>
+                    </div>
+
+                    <p>Raw text is inherently messy, so I had to run all of it through NLTK, using custom regex cleaning and lemmatization just to get the data into a state where an algorithm could actually make sense of it. Once the text was standardized, the real challenge was building the brain of the application. I built an n-gram TF-IDF vectorizer with Scikit-Learn to convert the natural language descriptions into sparse embeddings.</p>
+
+                    <div class="story-image-grid full">
+                        <div class="s-img large"><img src="Screenshot 2026-09-28 at 7.49.32 PM.png" alt="Img 4"></div>
+                    </div>
+
+                    <p>Now, when a user types in a quirky trait, the engine calculates the Cosine Similarity to find the closest semantic match. To keep the experience dynamic, I implemented Top-N stochastic sampling for the final avatar selection. I wrapped the machine learning logic in a FastAPI service for real-time inference, and designed a dark-mode UI using Tailwind CSS, wired directly to the Pexels API to dynamically fetch and render live animal images.</p>
+                `
+            },
+            "5": {
+                tag: "Fractal Export Predictor",
+                title: "Earning Accuracy: From 11% Guesses to 78% Precision",
+                html: `
+                    <p>When you train a machine learning model on messy, real-world export data, you quickly learn a harsh truth: accuracy isn’t gifted, it’s earned.</p>
+
+                    <div class="story-image-grid full">
+                        <div class="s-img large"><img src="Prediction.png" alt="Img 1"></div>
+                    </div>
+
+                    <p>The first iteration of my export price predictor for Fractal Overseas was a humbling experience. It hit exactly 11.4% accuracy. I had essentially built a machine that was just guessing with extra mathematical steps. But I wasn't going to let the data win that easily.</p>
+
+                    <div class="story-image-grid">
+                        <div class="s-img"><img src="Screenshot 2026-09-28 at 7.58.22 PM.png" alt="Img 2"></div>
+                        <div class="s-img"><img src="Screenshot 2026-09-28 at 8.03.08 PM.png" alt="Img 3"></div>
+                    </div>
+
+                    <p>I spent days engineering features, stripping out the noise, and isolating the variables that actually moved the needle on international shipping and export prices. I iterated through different models, tuned hyperparameters, and ran endless cross-validation loops. Finally, the breakthrough hit: the model locked in at 78.6% precision. But a highly accurate model stuck in a Jupyter Notebook is functionally useless. I needed this to be a living, breathing tool.</p>
+
+                    <div class="story-image-grid full">
+                        <div class="s-img large"><img src="1755615236886.jpeg" alt="Img 4"></div>
+                    </div>
+
+                    <p>I built the backend using FastAPI—it’s lightweight, asynchronous, and an absolute dream for serving machine learning models. To ensure the application could actually scale, I integrated a PostgreSQL database. For the user interface, I wrote a custom HTML, CSS, and JavaScript frontend that uses the Fetch API to send parameters, validate the input through Pydantic, and render real-time predictions seamlessly.</p>
+                    <p>Taking this project from an 11% guess to a fully deployed 78% prediction engine was a massive undertaking. It proved that building ML for the real world means mastering the entire pipeline—from the initial data wrangling to the final responsive UI.</p>
+                `
+            }
+        };
+
+        // MODAL LOGIC
+        const modal = document.getElementById('story-modal');
+        const closeModal = document.getElementById('close-modal');
+        const modalContentArea = document.getElementById('modal-content-area');
+        const cards = document.querySelectorAll('.story-card');
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const id = card.dataset.story;
+                const data = storyData[id];
+                
+                modalContentArea.innerHTML = `
+                    <div class="m-header">
+                        <span class="m-tag">${data.tag}</span>
+                        <h2 class="m-title">${data.title}</h2>
+                    </div>
+                    <div class="m-body">
+                        ${data.html}
+                    </div>
+                `;
+                
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            setTimeout(() => { modalContentArea.innerHTML = ''; }, 500);
+        });
+
+    </script>
+</body>
+</html>
